@@ -3,34 +3,106 @@
 #include "../UI/Toolbar.h"
 #include "../UI/BudgetBar.h"
 
+class Animal;
+class Chick;
+class Cow;
+class Wolf;
+
 class Game
 {
 private:
-	window* pWind;	//Pointer to the CMU graphics window
-	Toolbar* gameToolbar;
-	Budgetbar* gameBudgetbar;
+    window* pWind;
+    Toolbar* gameToolbar;
+    Budgetbar* gameBudgetbar;
+    int remainingTime = 0;
+    int currentLevel = 1;
+    int goal = 10;
+    int animalscount = 0;
+    int Animalsbuying = 0;
+    int waterbuying = 0;
 
 public:
-	int budget = 30000;
-	Game();
-	~Game();
+    // ── Budget ──────────────────────────────────────────
+    int  budget = 30000;
+    bool buyWater = false;
 
-	clicktype getMouseClick(int& x, int& y) const; //Get coordinate where user clicks and returns click type (left/right)
-	string getSrting() const;	 //Returns a string entered by the user
+    // ── Animal Lists ────────────────────────────────────
+    Chick* chickList[100] = {};
+    Cow* cowList[100] = {};
+    Wolf* wolfList[100] = {};
+    int chickCount = 0;
+    int cowCount = 0;
+    int wolfCount = 0;
 
+    // ── Generic Animal List ──────────────────────────────
+    Animal** pAnimalList = nullptr;
+    int      animalCount = 0;
 
-	window* CreateWind(int, int, int, int) const; //creates the game window
-	void createToolbar();
-	void createBudgetbar();
-	void clearBudget() const;
-	void printBudget(string msg) const;
-	void clearStatusBar() const;	//Clears the status bar
+    // ── Animal Type Enum ────────────────────────────────
+    enum AnimalType { ANIMAL_NONE, COW, CHICK, WOLF };
+    AnimalType currentAnimal = ANIMAL_NONE;
 
+    // ── Items ────────────────────────────────────────────
+    struct Item {
+        point  pos;
+        string type;
+    };
+    Item* ItemList[100] = {};
+    int   ItemCount = 0;
 
-	void printMessage(string msg) const;	//Print a message on Status bar
+    // ── Food Areas ───────────────────────────────────────
+    struct FoodArea {
+        int x, y, amount;
+    };
+    vector<FoodArea> foodAreas;
 
-	void go() const;
+    // ── Flags & Timers ───────────────────────────────────
+    bool isPaused = false;
+    bool wolfCreated = false;
+    bool milk_show = false;
+    bool egg_show = false;
+    int  timer = 0;
 
-	window* getWind() const;		//returns a pointer to the graphics window
+    // ── NEW: Food Collision Flag ─────────────────────────
+    bool animalOnFood = false;  // true when any animal is on a food area
+
+    // ── Constructor / Destructor ─────────────────────────
+    Game();
+    ~Game();
+
+    // ── Core Loop ────────────────────────────────────────
+    void letsgo();
+    void UpdateGame();
+
+    // ── Wolf ─────────────────────────────────────────────
+    void trySpawnWolf();
+    void spawnWolf();
+
+    // ── Window / UI ──────────────────────────────────────
+    window* CreateWind(int, int, int, int) const;
+    window* getWind()                      const;
+    void createToolbar();
+    void createBudgetbar();
+    void clearBudget()            const;
+    void printBudget(string msg)  const;
+    void clearStatusBar()         const;
+    void printMessage(string msg) const;
+    void drawField()              const;
+    void drawWarehouse()          const;
+    void drawItems();
+    void drawFoodArea();
+    void checkAnimalEatFood();  // ADD this
+    // ── Helpers ──────────────────────────────────────────
+    clicktype getMouseClick(int& x, int& y) const;
+    string    getSrting()                   const;
+    void setCurrentAnimal(AnimalType type);
+    void updateTimer();
+    void initLevel();
+    void AddAnimal(Animal* pAni);
+    void eggadd();
+    void milkadd();
+    int elapsedSeconds = 0;  // counts real seconds, updated by updateTimer()
+    // ── NEW: Food Collision ──────────────────────────────
+    void checkAnimalOnFood();        // checks if animal overlaps food area
+    void flashField(color c);        // repaints field with given color
 };
-
