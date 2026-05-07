@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphics_prj", "graphics_prj.vcxproj", "{611A8A6B-D5E7-41B8-B75D-3A1E8C8621A1}"
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "graphics_prj", "graphics_prj.vcproj", "{611A8A6B-D5E7-41B8-B75D-3A1E8C8621A1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
